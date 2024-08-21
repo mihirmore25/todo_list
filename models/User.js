@@ -1,4 +1,8 @@
+import dotenv from "dotenv";
+dotenv.config({ path: "../.env" });
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
@@ -39,5 +43,15 @@ const userSchema = new Schema(
         timestamps: true,
     }
 );
+
+userSchema.methods.generateJWT = function () {
+    let payload = {
+        id: this._id,
+    };
+
+    return jwt.sign(payload, process.env.JWT_SECRET, {
+        expiresIn: "30m",
+    });
+};
 
 export const User = mongoose.model("user", userSchema);
