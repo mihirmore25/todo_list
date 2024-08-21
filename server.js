@@ -3,6 +3,7 @@ dotenv.config({ path: "./.env" });
 import express from "express";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.js";
+import taskRoutes from "./routes/tasks.js";
 import morgan from "morgan";
 import { dbClient } from "./db/dbConnection.js";
 const app = express();
@@ -21,6 +22,7 @@ const PORT = process.env.PORT || 4000;
 
 // Routes
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/tasks", taskRoutes);
 
 app.get("/", async (req, res) => {
     res.send("Hello world!");
