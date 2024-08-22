@@ -10,6 +10,8 @@ import {
 
 const router = express.Router();
 
+// verify is a middleware which will check 
+// if the user is authenticated or not
 router.get("/", verify, getTasks);
 router.post("/", verify, createTask);
 router.get("/:id", verify, getTask);
