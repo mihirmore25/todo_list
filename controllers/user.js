@@ -1,5 +1,5 @@
 import { User } from "../models/User.js";
-import { Task } from "../models/Task.js";
+import { Recipe } from "../models/Recipe.js";
 
 export const createUser = async (req, res) => {
     const { username, email, password } = req.body;
