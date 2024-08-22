@@ -86,3 +86,50 @@ export const getTask = async (req, res) => {
         data: task,
     });
 };
+
+export const updateTask = async (req, res) => {
+    const { title, description, status } = req.body;
+
+    let taskId = req.params.id;
+
+    if (!taskId || String(taskId).length < 24) {
+        return res.status(404).json({
+            status: false,
+            message: "Please search task with valid task id.",
+        });
+    }
+
+    const task = await Task.findById(taskId);
+
+    if (taskId && (task === null || undefined || 0)) {
+        return res.status(404).json({
+            status: false,
+            message: `Task did not found with ${taskId} id.`,
+        });
+    }
+
+    console.log("User ---> ", req.user);
+
+    if (
+        req.user._id.toString() == task.user.toString() ||
+        req.user.role == "admin"
+    ) {
+        const updatedTask = await Task.findByIdAndUpdate(
+            taskId,
+            {
+                title,
+                description,
+                status,
+            },
+            { new: true }
+        ).select("-__v");
+
+        console.log("Updated Task ---> ", updatedTask);
+
+        return res.status(200).json({
+            status: true,
+            data: updatedTask,
+            message: "Task has been updated successfully.",
+        });
+    }
+};
